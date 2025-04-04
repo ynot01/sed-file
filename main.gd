@@ -18,6 +18,8 @@ func _ready() -> void:
 		get_tree().quit(2)
 		return
 	
+	var trim_amt:int = 1
+	
 	var input_file:String
 	var n:int = 0
 	var input:String
@@ -28,12 +30,16 @@ func _ready() -> void:
 			push_error("File \"", file_string, "\" does not exist. Exiting.")
 			get_tree().quit(3)
 			return
+		
+		if FileAccess.get_file_as_string(file_string).contains("\r\n"):
+			trim_amt = 2
+		
 		match n:
 			0:
 				input_file = file_string
-				input = FileAccess.get_file_as_string(file_string).left(-2) # Trims end newline
-			1: pattern = FileAccess.get_file_as_string(file_string).left(-2)
-			2: replace = FileAccess.get_file_as_string(file_string).left(-2)
+				input = FileAccess.get_file_as_string(file_string).left(-trim_amt) # Trims end newline
+			1: pattern = FileAccess.get_file_as_string(file_string).left(-trim_amt)
+			2: replace = FileAccess.get_file_as_string(file_string).left(-trim_amt)
 		n += 1
 	
 	if !input.contains(pattern):
